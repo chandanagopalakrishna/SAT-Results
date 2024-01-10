@@ -1,0 +1,94 @@
+import json
+
+class SATResultsManager:
+def __init__(self):
+self.sat_results = {}
+self.file_path = &quot;sat_results.json&quot;
+
+def insert_data(self):
+name = input(&quot;Enter Name: &quot;)
+address = input(&quot;Enter Address: &quot;)
+city = input(&quot;Enter City: &quot;)
+country = input(&quot;Enter Country: &quot;)
+pincode = input(&quot;Enter Pincode: &quot;)
+sat_score = float(input(&quot;Enter SAT Score: &quot;))
+passed = &quot;Pass&quot; if sat_score &gt; 30 else &quot;Fail&quot;
+
+self.sat_results[name] = {
+&quot;Address&quot;: address,
+&quot;City&quot;: city,
+&quot;Country&quot;: country,
+&quot;Pincode&quot;: pincode,
+&quot;SAT Score&quot;: sat_score,
+&quot;Passed&quot;: passed
+}
+
+print(&quot;Data inserted successfully!&quot;)
+
+def view_all_data(self):
+print(json.dumps(self.sat_results, indent=2))
+
+def get_rank(self):
+
+name = input(&quot;Enter Name to get rank: &quot;)
+sorted_results = sorted(self.sat_results.items(), key=lambda x: x[1][&quot;SAT Score&quot;], reverse=True)
+rank = [i + 1 for i, (candidate_name, _) in enumerate(sorted_results)].index(name) + 1
+print(f&quot;{name}&#39;s rank is {rank}&quot;)
+
+def update_score(self):
+name = input(&quot;Enter Name to update SAT score: &quot;)
+if name in self.sat_results:
+new_score = float(input(&quot;Enter new SAT Score: &quot;))
+self.sat_results[name][&quot;SAT Score&quot;] = new_score
+self.sat_results[name][&quot;Passed&quot;] = &quot;Pass&quot; if new_score &gt; 30 else &quot;Fail&quot;
+print(&quot;SAT score updated successfully!&quot;)
+else:
+print(f&quot;No record found for {name}&quot;)
+
+def delete_record(self):
+name = input(&quot;Enter Name to delete record: &quot;)
+if name in self.sat_results:
+del self.sat_results[name]
+print(f&quot;{name}&#39;s record deleted successfully!&quot;)
+else:
+print(f&quot;No record found for {name}&quot;)
+
+def save_to_file(self):
+with open(self.file_path, &quot;w&quot;) as file:
+json.dump(self.sat_results, file, indent=2)
+print(f&quot;Data saved to {self.file_path}&quot;)
+
+def main():
+sat_manager = SATResultsManager()
+
+while True:
+print(&quot;\nMenu:&quot;)
+print(&quot;1. Insert data&quot;)
+print(&quot;2. View all data&quot;)
+print(&quot;3. Get rank&quot;)
+print(&quot;4. Update score&quot;)
+print(&quot;5. Delete one record&quot;)
+print(&quot;6. Save to file&quot;)
+print(&quot;7. Quit&quot;)
+
+choice = input(&quot;Enter your choice (1-7): &quot;)
+
+if choice == &quot;1&quot;:
+sat_manager.insert_data()
+elif choice == &quot;2&quot;:
+sat_manager.view_all_data()
+elif choice == &quot;3&quot;:
+sat_manager.get_rank()
+elif choice == &quot;4&quot;:
+sat_manager.update_score()
+elif choice == &quot;5&quot;:
+sat_manager.delete_record()
+elif choice == &quot;6&quot;:
+sat_manager.save_to_file()
+elif choice == &quot;7&quot;:
+break
+else:
+print(&quot;Invalid choice. Please enter a number between 1 and 7.&quot;)
+
+if __name__ == &quot;__main__&quot;:
+main()
